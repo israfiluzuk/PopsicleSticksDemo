@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class RotateStick : MonoBehaviour
 {
-    
-    Stick SticksEl;
-    Node nodeObj;
+
     RaycastHit hit;
     float clickTime;
     RaycastHit2D rayhit;
@@ -14,8 +12,7 @@ public class RotateStick : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            //transform.Rotate(new Vector3(transform.rotation.x, transform.rotation.y, transform.rotation.z + 45));
-            //transform.localRotation = Quaternion.EulerAngles(0,0,transform.localEulerAngles.z - 45);
+
             clickTime = Time.time;
             rayhit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, Mathf.Infinity);
         }
@@ -52,15 +49,6 @@ public class RotateStick : MonoBehaviour
         }
     }
 
-    /*
-     * float enkucuk = 999999;
-     * int enkucukId = 0;
-     * for{
-     * MouseUp olduğunda -> Vector2.Distance(rayhit.transfrom.position,nodes[i].transform.position) < enkucuk { enkuguck = [distyance] , enkucukId = i } 
-     * }
-     *  raycast.transform.position = nodes[enkucukId].transfrom.position;
-     * 
-     * */
 
 
 }

@@ -15,8 +15,7 @@ public class InputController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            //transform.Rotate(new Vector3(transform.rotation.x, transform.rotation.y, transform.rotation.z + 45));
-            //transform.localRotation = Quaternion.EulerAngles(0,0,transform.localEulerAngles.z - 45);
+
             clickTime = Time.time;
             rayhit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, Mathf.Infinity, selectableObjLayerMask);
         }
@@ -50,10 +49,15 @@ public class InputController : MonoBehaviour
                         {
                             smallestDistance = distance;
                             smallestId = i; 
+                            Debug.Log("Node : "+nodes[i]);
+
+                            Debug.Log("Parent : "+ nodes[i].transform.parent);
+
                         }
                     }
 
                     rayhit.transform.position = nodes[smallestId].transform.position;
+                    
                 }               
                 
             }
