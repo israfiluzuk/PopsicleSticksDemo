@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class Node : MonoBehaviour
 {
-    public List<Stick> sticks;
+    public List<Stick> sticks = new List<Stick>(); 
 }

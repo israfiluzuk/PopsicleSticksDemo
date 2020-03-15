@@ -11,12 +11,12 @@ public class StickSpawner : MonoBehaviour
     public Transform sticks;
     public Color[] stickColors;
     public Node[] nodes;
-    public Node selectableNode;
 
     public List<int> degreeList = new List<int>();
 
 
     int maxNumbers = 4;
+    int generatedNodeCount = 0;
 
     void Start()
     {
@@ -31,49 +31,46 @@ public class StickSpawner : MonoBehaviour
     }
 
     public void ReGenerate()
-    { 
+    {
+        generatedNodeCount++;
+        GameObject generatedNode = new GameObject("MoveableObject");
+        generatedNode.transform.position = new Vector2(0, -3.25f);
+        Node selectableNode =  generatedNode.AddComponent<Node>(); 
+        generatedNode.AddComponent<BoxCollider2D>();
+        generatedNode.layer = 8;
+       // selectableNode.sticks.Clear();
 
-        selectableNode.sticks.Clear();
-        for (int i = 0; i < sticks.childCount; i++)
-        {
-            Destroy(sticks.GetChild(i).gameObject);
-        }
         degreeList.Clear();
         DegreeListAdder();
-
+      //  print(selectableNode.name);
 
         for (int i = 1; i < Random.Range(1f, 4f); i++)
         {
-            
            //Debug.Log("Rand : " + i);
 
             value = Random.Range(0,degreeList.Count);
 
-
-            //Color color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
-            GameObject stickInit = Instantiate(Stick, transform.position, Quaternion.Euler(0, 0, (-1)*degreeList[value]), sticks);
+            GameObject stickInit = Instantiate(Stick, transform.position, Quaternion.Euler(0, 0, (-1)*degreeList[value]), generatedNode.transform);
 
             Debug.Log("__"+ degreeList[value]);
             
-            
             int colorId = Random.Range(0, stickColors.Length);
+            //---
+
             stickInit.GetComponent<Renderer>().material.color = stickColors[colorId];
             stickInit.GetComponent<Stick>().degree = degreeList[value];
+            //remove value at list
             degreeList.RemoveAt(value);Debug.Log("UZUNLUK : " + degreeList.Count);
+
             stickInit.GetComponent<Stick>().color = stickColors[colorId];
-            selectableNode.sticks.Add(stickInit.GetComponent<Stick>());
-
-
+            selectableNode.sticks.Add(stickInit.GetComponent<Stick>()); 
         }
+
+        
 
        // degreeList = degreeList.OrderBy(tvz => System.Guid.NewGuid()).ToList();
     }
-
-    public void MoveStick()
-    {
-        nodes[0].sticks[0] = selectableNode.sticks[0];
-        selectableNode.sticks.RemoveAt(0);
-    }
+     
 
     }
      
