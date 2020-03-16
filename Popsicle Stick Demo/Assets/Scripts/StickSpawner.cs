@@ -15,7 +15,6 @@ public class StickSpawner : MonoBehaviour
 
     public List<int> degreeList = new List<int>();
 
-
     int generatedNodeCount = 0;
 
     void Start()
@@ -30,7 +29,6 @@ public class StickSpawner : MonoBehaviour
         degreeList.Add(135);
     }
 
-    
     public void ReGenerate()
     {
         generatedNodeCount++;
@@ -54,7 +52,7 @@ public class StickSpawner : MonoBehaviour
 
             GameObject stickInit = Instantiate(Stick, transform.position, Quaternion.Euler(0, 0, (-1)*degreeList[value]), generatedNode.transform);
 
-            Debug.Log("__"+ degreeList[value]);
+            //Debug.Log("__"+ degreeList[value]);
             
             int colorId = Random.Range(0, stickColors.Length);
             //---
@@ -62,17 +60,14 @@ public class StickSpawner : MonoBehaviour
             stickInit.GetComponent<Renderer>().material.color = stickColors[colorId];
             stickInit.GetComponent<Stick>().degree = degreeList[value];
             //remove value at list
-            degreeList.RemoveAt(value);Debug.Log("UZUNLUK : " + degreeList.Count);
+            degreeList.RemoveAt(value);
+
 
             stickInit.GetComponent<Stick>().color = stickColors[colorId];
             selectableNode.sticks.Add(stickInit.GetComponent<Stick>()); 
         }
 
-        
-
-       // degreeList = degreeList.OrderBy(tvz => System.Guid.NewGuid()).ToList();
     }
-     
 
     }
      

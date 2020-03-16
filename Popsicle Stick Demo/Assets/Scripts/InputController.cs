@@ -11,8 +11,12 @@ public class InputController : MonoBehaviour
     int smallestId = 1;
     public Transform[] nodes;
     public LayerMask selectableObjLayerMask;
-    private void Update()
+    GameObject obj;
+    
+    void Update()
     {
+
+
         if (Input.GetMouseButtonDown(0))
         {
 
@@ -34,7 +38,15 @@ public class InputController : MonoBehaviour
                             newAngles.z = newAngles.z < 0 ? newAngles.z + 180 : newAngles.z;
                             node.sticks[i].transform.localEulerAngles = newAngles;
                             node.sticks[i].degree = Mathf.CeilToInt(newAngles.z);
+
+                            Debug.Log("PARENT : " + node.sticks[i].transform.parent.name);
+                            //node.sticks[i].transform.parent = null;
+                            //node.sticks[i].transform.SetParent("MoveableObject");
+                            
+                            
+
                         }
+                        
                     }
                 }
                 else
@@ -51,13 +63,29 @@ public class InputController : MonoBehaviour
                             smallestId = i; 
                             Debug.Log("Node : "+nodes[i]);
 
-                            Debug.Log("Parent : "+ nodes[i].transform.parent);
+                            //Debug.Log("Parent : "+ nodes[i].transform.parent);
 
                         }
                     }
 
                     rayhit.transform.position = nodes[smallestId].transform.position;
-                    
+
+                    if(nodes[smallestId].transform.childCount > 0)
+                    {
+                        for (int i = 0; i < rayhit.transform.childCount; i++)
+                        {
+                            nodes[smallestId].transform.GetChild(0).GetComponent<Node>().sticks.Add(rayhit.transform.GetChild(i).GetComponent<Stick>());
+                            rayhit.transform.GetChild(i).transform.SetParent(nodes[smallestId].transform.GetChild(0));
+                        }
+                        Destroy(rayhit.transform.gameObject);
+                    }
+                    else
+                    { 
+                        rayhit.transform.SetParent(nodes[smallestId].transform);
+                    }
+
+
+
                 }               
                 
             }
@@ -79,14 +107,3 @@ public class InputController : MonoBehaviour
 }
 
 
-
-
-/*
-   * float smallest = 999999;
-   * int smallestId = 0;
-   * for{
-   * MouseUp olduğunda -> Vector2.Distance(rayhit.transfrom.position,nodes[i].transform.position) < smallest { enkuguck = [distyance] , smallestId = i } 
-   * }
-   *  raycast.transform.position = nodes[smallestId].transfrom.position;
-   * 
-   * */
