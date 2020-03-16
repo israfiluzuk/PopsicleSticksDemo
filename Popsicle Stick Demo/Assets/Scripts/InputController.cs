@@ -11,7 +11,9 @@ public class InputController : MonoBehaviour
     int smallestId = 1;
     public Transform[] nodes;
     public LayerMask selectableObjLayerMask;
-    GameObject obj;
+
+   // private List<Transform> toMove = new List<Transform>();
+
     
     void Update()
     {
@@ -39,50 +41,73 @@ public class InputController : MonoBehaviour
                             node.sticks[i].transform.localEulerAngles = newAngles;
                             node.sticks[i].degree = Mathf.CeilToInt(newAngles.z);
 
-                            Debug.Log("PARENT : " + node.sticks[i].transform.parent.name);
-                            //node.sticks[i].transform.parent = null;
-                            //node.sticks[i].transform.SetParent("MoveableObject");
-                            
-                            
-
                         }
                         
                     }
                 }
-                else
+                else 
                 {
-                    smallestId = 0;
-                    smallestDistance = 999;
-                    for (int i = 0; i < nodes.Length; i++)
+                    Node currNode = rayhit.transform.GetComponent<Node>();
+                    if(currNode.isMoved == false)
                     {
-
-                        float distance = Vector2.Distance(rayhit.transform.position, nodes[i].transform.position);
-                        if (smallestDistance > distance)
+                        smallestId = 0;
+                        smallestDistance = 999;
+                        for (int i = 0; i < nodes.Length; i++)
                         {
-                            smallestDistance = distance;
-                            smallestId = i; 
-                            Debug.Log("Node : "+nodes[i]);
 
-                            //Debug.Log("Parent : "+ nodes[i].transform.parent);
+                            float distance = Vector2.Distance(rayhit.transform.position, nodes[i].transform.position);
+                            if (smallestDistance > distance)
+                            {
+                                smallestDistance = distance;
+                                smallestId = i;
 
+
+                            }
                         }
-                    }
 
-                    rayhit.transform.position = nodes[smallestId].transform.position;
-
-                    if(nodes[smallestId].transform.childCount > 0)
-                    {
-                        for (int i = 0; i < rayhit.transform.childCount; i++)
-                        {
-                            nodes[smallestId].transform.GetChild(0).GetComponent<Node>().sticks.Add(rayhit.transform.GetChild(i).GetComponent<Stick>());
-                            rayhit.transform.GetChild(i).transform.SetParent(nodes[smallestId].transform.GetChild(0));
+                        rayhit.transform.position = nodes[smallestId].transform.position;
+                        if (rayhit.transform.parent != nodes[smallestId].transform)
+                        { 
+                            if (nodes[smallestId].transform.childCount > 0 && nodes[smallestId].transform != rayhit.transform.parent)
+                            {
+                                if (currNode != null)
+                                {
+                                    for (int i = 0; i < currNode.sticks.Count; i++)
+                                    {
+                                        nodes[smallestId].transform.GetChild(0).GetComponent<Node>().sticks.Add(currNode.sticks[i]);
+                                        currNode.sticks[i].transform.SetParent(nodes[smallestId].transform.GetChild(0));
+                                    }
+                                    Destroy(rayhit.transform.gameObject);
+                                }
+                            }
+                            else
+                            {
+                                if (currNode != null)
+                                {
+                                    currNode.isMoved = true;
+                                }
+                                rayhit.transform.SetParent(nodes[smallestId].transform);
+                            }
                         }
-                        Destroy(rayhit.transform.gameObject);
+
+                        
                     }
-                    else
-                    { 
-                        rayhit.transform.SetParent(nodes[smallestId].transform);
-                    }
+                   
+
+
+                    //foreach (Transform child in rayhit.transform)
+                    //{
+                    //    nodes[smallestId].transform.GetChild(0).GetComponent<Node>().sticks.Add(child.GetComponent<Stick>());
+                    //    toMove.Add(child);
+                    //}
+                    //Destroy(rayhit.transform.gameObject);
+                    //foreach (var child in toMove)
+                    //{
+                    //    child.SetParent(nodes[smallestId].transform.GetChild(0));
+                    //}
+
+                    
+
 
 
 
@@ -94,14 +119,21 @@ public class InputController : MonoBehaviour
         }
         else if (Input.GetMouseButton(0))
         {
-            if (Time.time - clickTime >= 0.2f)
+            if(rayhit.transform != null)
             {
-                if (rayhit)
-                {
-                    Vector2 newPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    rayhit.transform.position = newPos;
-                }
+                Node currNode = rayhit.transform.GetComponent<Node>();
+                if(currNode != null)
+                    if (currNode.isMoved == false)
+                    {
+                        if (Time.time - clickTime >= 0.2f)
+                        {
+                            Vector2 newPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                            rayhit.transform.position = newPos;
+                        }
+                    }
             }
+          
+              
         }
     }
 }

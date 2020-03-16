@@ -4,5 +4,6 @@ using UnityEngine;
 
 public class Node : MonoBehaviour
 {
-    public List<Stick> sticks = new List<Stick>(); 
+    public List<Stick> sticks = new List<Stick>();
+    public bool isMoved = false;
 }

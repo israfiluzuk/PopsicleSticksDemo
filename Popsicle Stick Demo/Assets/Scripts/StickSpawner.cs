@@ -11,7 +11,7 @@ public class StickSpawner : MonoBehaviour
     public Transform sticks;
     public Color[] stickColors;
     public Node[] nodes;
-    public GameObject generatedNode;
+    public Transform generatedNodeParent;
 
     public List<int> degreeList = new List<int>();
 
@@ -32,12 +32,13 @@ public class StickSpawner : MonoBehaviour
     public void ReGenerate()
     {
         generatedNodeCount++;
-        generatedNode = new GameObject("MoveableObject");
+        GameObject generatedNode = new GameObject("MoveableObject");
         generatedNode.transform.position = new Vector2(0, -3.34f);
         Node selectableNode = generatedNode.AddComponent<Node>(); 
 
         generatedNode.AddComponent<BoxCollider2D>();
         generatedNode.layer = 8;
+        generatedNode.transform.SetParent(generatedNodeParent);
        // selectableNode.sticks.Clear();
 
         degreeList.Clear();
