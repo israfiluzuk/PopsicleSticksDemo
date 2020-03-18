@@ -12,17 +12,11 @@ public class InputController : MonoBehaviour
     int smallestId = 1;
     public Transform[] nodes;
     public LayerMask selectableObjLayerMask;
-    Color[] colorMatch = new Color[4];
-
-
-    
+        
     void Update()
     {
-
-
         if (Input.GetMouseButtonDown(0))
         {
-
             clickTime = Time.time;
             rayhit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, Mathf.Infinity, selectableObjLayerMask);
         }
@@ -61,10 +55,10 @@ public class InputController : MonoBehaviour
                             {
                                 smallestDistance = distance;
                                 smallestId = i;
+                                //Debug.Log(currNode.sticks[i].degree);
                             }
 
                         }
-
                         rayhit.transform.position = nodes[smallestId].transform.position;
                         if (rayhit.transform.parent != nodes[smallestId].transform)
                         { 
@@ -72,10 +66,12 @@ public class InputController : MonoBehaviour
                             {
                                 if (currNode != null)
                                 {
+                                    Debug.Log(nodes[smallestId].transform.gameObject.name);
                                     for (int i = 0; i < currNode.sticks.Count; i++)
                                     {
                                         nodes[smallestId].transform.GetChild(0).GetComponent<Node>().sticks.Add(currNode.sticks[i]);
                                         currNode.sticks[i].transform.SetParent(nodes[smallestId].transform.GetChild(0));
+                                        Debug.Log(currNode.sticks[i].degree);
                                     }
                                     Destroy(rayhit.transform.gameObject);
                                 }
@@ -113,17 +109,15 @@ public class InputController : MonoBehaviour
                         }
                     }
             }
-          
-              
         }
     }
 
     public bool StickControl()
     {
+
         bool areSameSticks = true;
         Color[] horizontalSticsColor = new Color[3];
-        int selectedStickCount = 0;
-        GameObject[] horizontalNodes = new GameObject[3];
+        int selectedStickCount = 0; 
         for (int i = 0; i < 3; i++)
         {
             if(nodes[i].childCount > 0)
@@ -134,8 +128,7 @@ public class InputController : MonoBehaviour
                     for (int j = 0; j < currNode.sticks.Count; j++)
                     {
                         if (currNode.sticks[j].degree == 90)
-                        {
-                            horizontalNodes[selectedStickCount] = currNode.sticks[j].gameObject;
+                        { 
                             horizontalSticsColor[selectedStickCount] = currNode.sticks[j].color;
                             selectedStickCount++;
                         }
@@ -159,16 +152,28 @@ public class InputController : MonoBehaviour
         }
 
         if(areSameSticks)
-        {
+        { 
             ScoreScript.scoreValue += 10;
-            for (int j = 0; j < horizontalNodes.Length; j++)
+            for (int j =0; j< 3; j++)
             {
-                Destroy(horizontalNodes[j]);
+                Node rStick = nodes[j].GetChild(0).GetComponent<Node>();
+                for (int i = 0; i< rStick.sticks.Count; i++)
+                {
+                    if (rStick.sticks[i].degree == 90)
+                    {
+                        GameObject removedObj = rStick.sticks[i].gameObject;
+                        rStick.sticks.RemoveAt(i);
+                        Destroy(removedObj);
+                    }
+                }
+                
             }
+
         }
 
         return areSameSticks;
     }
+
 }
 
 
