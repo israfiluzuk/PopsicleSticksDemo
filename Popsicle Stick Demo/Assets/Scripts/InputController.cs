@@ -1,18 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InputController : MonoBehaviour
 {
-     
+
     float clickTime;
     RaycastHit2D rayhit;
     float smallestDistance = 1.5f;
     int smallestId = 1;
     public Transform[] nodes;
     public LayerMask selectableObjLayerMask;
+    Color[] colorMatch = new Color[4];
 
-   // private List<Transform> toMove = new List<Transform>();
 
     
     void Update()
@@ -38,9 +39,9 @@ public class InputController : MonoBehaviour
                         {
                             Vector3 newAngles = new Vector3(0, 0, (node.sticks[i].transform.localEulerAngles.z - 45));
                             newAngles.z = newAngles.z < 0 ? newAngles.z + 180 : newAngles.z;
+                            newAngles.z = newAngles.z >180 ? newAngles.z - 180 : newAngles.z;
                             node.sticks[i].transform.localEulerAngles = newAngles;
-                            node.sticks[i].degree = Mathf.CeilToInt(newAngles.z);
-
+                            node.sticks[i].degree = (int)newAngles.z;
                         }
                         
                     }
@@ -60,9 +61,8 @@ public class InputController : MonoBehaviour
                             {
                                 smallestDistance = distance;
                                 smallestId = i;
-
-
                             }
+
                         }
 
                         rayhit.transform.position = nodes[smallestId].transform.position;
@@ -90,32 +90,13 @@ public class InputController : MonoBehaviour
                             }
                         }
 
-                        
                     }
-                   
-
-
-                    //foreach (Transform child in rayhit.transform)
-                    //{
-                    //    nodes[smallestId].transform.GetChild(0).GetComponent<Node>().sticks.Add(child.GetComponent<Stick>());
-                    //    toMove.Add(child);
-                    //}
-                    //Destroy(rayhit.transform.gameObject);
-                    //foreach (var child in toMove)
-                    //{
-                    //    child.SetParent(nodes[smallestId].transform.GetChild(0));
-                    //}
-
-                    
-
-
-
 
                 }               
                 
             }
             rayhit = new RaycastHit2D();
-
+            StickControl();
         }
         else if (Input.GetMouseButton(0))
         {
@@ -135,6 +116,58 @@ public class InputController : MonoBehaviour
           
               
         }
+    }
+
+    public bool StickControl()
+    {
+        bool areSameSticks = true;
+        Color[] horizontalSticsColor = new Color[3];
+        int selectedStickCount = 0;
+        GameObject[] horizontalNodes = new GameObject[3];
+        for (int i = 0; i < 3; i++)
+        {
+            if(nodes[i].childCount > 0)
+            {
+                Node currNode = nodes[i].GetChild(0).GetComponent<Node>();
+                if (currNode != null)
+                {
+                    for (int j = 0; j < currNode.sticks.Count; j++)
+                    {
+                        if (currNode.sticks[j].degree == 90)
+                        {
+                            horizontalNodes[selectedStickCount] = currNode.sticks[j].gameObject;
+                            horizontalSticsColor[selectedStickCount] = currNode.sticks[j].color;
+                            selectedStickCount++;
+                        }
+                    }
+                }
+            } 
+        }
+        if(selectedStickCount == 3)
+        {
+            for (int i = 1; i < 3; i++)
+            {
+                if(horizontalSticsColor[0] != horizontalSticsColor[i])
+                {
+                    areSameSticks = false;
+                }
+            }
+        }
+        else
+        {
+            areSameSticks = false;
+        }
+
+        if(areSameSticks)
+        {
+            ScoreScript.scoreValue += 10;
+            for (int j = 0; j < horizontalNodes.Length; j++)
+            {
+                Destroy(horizontalNodes[j]);
+            }
+        }
+
+        return areSameSticks;
     }
 }
 

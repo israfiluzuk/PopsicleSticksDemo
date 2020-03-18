@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 
 public class StickSpawner : MonoBehaviour
 {
     
     public GameObject Stick;
-    int[] degrees = { 0, 45, 90, 135 };
+    //int[] degrees = { 0, 45, 90, 135 };
     int value;
     public Transform sticks;
     public Color[] stickColors;
@@ -70,5 +70,10 @@ public class StickSpawner : MonoBehaviour
 
     }
 
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name); 
     }
+
+}
      
