@@ -1677,6 +1677,16 @@ PrefabInstance:
       propertyPath: generatedNodeParent
       value: 
       objectReference: {fileID: 1251736688}
+    - target: {fileID: -109845112959851671, guid: 1abad609dba3d5d48b92c74242d97260,
+        type: 3}
+      propertyPath: generateButton
+      value: 
+      objectReference: {fileID: 1829428396}
+    - target: {fileID: -109845112959851671, guid: 1abad609dba3d5d48b92c74242d97260,
+        type: 3}
+      propertyPath: btnGen
+      value: 
+      objectReference: {fileID: 1829428396}
     - target: {fileID: 6718076163845353302, guid: 1abad609dba3d5d48b92c74242d97260,
         type: 3}
       propertyPath: m_LocalPosition.x

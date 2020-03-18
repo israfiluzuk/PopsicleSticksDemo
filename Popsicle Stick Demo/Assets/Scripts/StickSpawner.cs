@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class StickSpawner : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class StickSpawner : MonoBehaviour
     public Transform sticks;
     public Color[] stickColors;
     public Node[] nodes;
+    public Button btnGen;
     public Transform generatedNodeParent;
 
     public List<int> degreeList = new List<int>();
@@ -20,6 +22,7 @@ public class StickSpawner : MonoBehaviour
     void Start()
     {
         DegreeListAdder();
+        btnGen.gameObject.SetActive(true);
     }
     void DegreeListAdder()
     {
@@ -28,45 +31,54 @@ public class StickSpawner : MonoBehaviour
         degreeList.Add(90);
         degreeList.Add(135);
     }
-
+    //InputController objChecker = new InputController();
     public void ReGenerate()
     {
-        generatedNodeCount++;
-        GameObject generatedNode = new GameObject("MoveableObject");
-        generatedNode.transform.position = new Vector2(0, -3.34f);
-        Node selectableNode = generatedNode.AddComponent<Node>(); 
-
-        generatedNode.AddComponent<BoxCollider2D>();
-        generatedNode.layer = 8;
-        generatedNode.transform.SetParent(generatedNodeParent);
-       // selectableNode.sticks.Clear();
-
-        degreeList.Clear();
-        DegreeListAdder();
-      //  print(selectableNode.name);
-
-        for (int i = 1; i < Random.Range(1f, 4f); i++)
+        if (generatedNodeParent.transform.childCount == 0)
         {
-           //Debug.Log("Rand : " + i);
+            btnGen.gameObject.SetActive(true);
+            generatedNodeCount++;
+            GameObject generatedNode = new GameObject("MoveableObject");
+            generatedNode.transform.position = new Vector2(0, -3.34f);
+            Node selectableNode = generatedNode.AddComponent<Node>();
 
-            value = Random.Range(0,degreeList.Count);
+            generatedNode.AddComponent<BoxCollider2D>();
+            generatedNode.layer = 8;
+            generatedNode.transform.SetParent(generatedNodeParent);
+            // selectableNode.sticks.Clear();
 
-            GameObject stickInit = Instantiate(Stick, transform.position, Quaternion.Euler(0, 0, (-1)*degreeList[value]), generatedNode.transform);
+            degreeList.Clear();
+            DegreeListAdder();
+            //  print(selectableNode.name);
 
-            //Debug.Log("__"+ degreeList[value]);
-            
-            int colorId = Random.Range(0, stickColors.Length);
-            //---
+            for (int i = 1; i < Random.Range(1f, 4f); i++)
+            {
+                //Debug.Log("Rand : " + i);
 
-            stickInit.GetComponent<Renderer>().material.color = stickColors[colorId];
-            stickInit.GetComponent<Stick>().degree = degreeList[value];
-            //remove value at list
-            degreeList.RemoveAt(value);
+                value = Random.Range(0, degreeList.Count);
+
+                GameObject stickInit = Instantiate(Stick, transform.position, Quaternion.Euler(0, 0, (-1) * degreeList[value]), generatedNode.transform);
+
+                //Debug.Log("__"+ degreeList[value]);
+
+                int colorId = Random.Range(0, stickColors.Length);
+                //---
+
+                stickInit.GetComponent<Renderer>().material.color = stickColors[colorId];
+                stickInit.GetComponent<Stick>().degree = degreeList[value];
+                //remove value at list
+                degreeList.RemoveAt(value);
 
 
-            stickInit.GetComponent<Stick>().color = stickColors[colorId];
-            selectableNode.sticks.Add(stickInit.GetComponent<Stick>()); 
+                stickInit.GetComponent<Stick>().color = stickColors[colorId];
+                selectableNode.sticks.Add(stickInit.GetComponent<Stick>());
+            }
         }
+        else
+        {
+            btnGen.gameObject.SetActive(false);
+        }
+        btnGen.gameObject.SetActive(true);
 
     }
 

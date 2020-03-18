@@ -73,7 +73,7 @@ MonoBehaviour:
   m_MinSize: {x: 204, y: 344}
   m_MaxSize: {x: 4004, y: 8044}
   vertical: 1
-  controlID: 117
+  controlID: 95
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -218,7 +218,7 @@ MonoBehaviour:
   m_MinSize: {x: 232, y: 472}
   m_MaxSize: {x: 10002, y: 14022}
   vertical: 1
-  controlID: 53
+  controlID: 32
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -433,23 +433,23 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: aec9ffff
-      m_LastClickedID: -13906
-      m_ExpandedIDs: 42c9ffffa4c9ffffc0c9ffff7ccaffff8ecaffff26cdffff42cdffff2cd0ffff64d0ffff38d1ffff4ad1fffffcd6ffffb2d7ffff5cdcffff34ddffff84e2ffffdce2ffff44e3ffff82eeffffdef0ffff72f3ffff22f5ffff52f7ffffe8f9ffff3efaffff6afbffff9c330000a4330000ac330000be3300006e3b00006e3c0000
+      m_SelectedIDs: 
+      m_LastClickedID: 0
+      m_ExpandedIDs: a2d8ffff6cdaffff98dcffffa2dcffff06deffffcedfffff10e0ffffa4e0ffff26e2ffff7ee3ffffc0e4fffface5ffff36e7ffff70e7ffffe2e8fffff2e9ffff52faffff6afbffff9c330000ac330000be330000b83f0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: stick(Clone)
-        m_OriginalName: stick(Clone)
+        m_Name: 
+        m_OriginalName: 
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: -12234
+        m_UserData: 0
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 0
+        m_OriginalEventType: 11
         m_IsRenamingFilename: 0
         m_ClientGUIView: {fileID: 10}
       m_SearchString: 
@@ -498,19 +498,19 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts
+    - Assets/Prefabs
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Scripts
+  - Assets/Prefabs
   m_LastFoldersGridSize: -1
   m_LastProjectPath: D:\UNITY WORKS\Work Demos\PopsicleSticksDemo\Popsicle Stick Demo
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 122f0000
-    m_LastClickedID: 12050
+    m_SelectedIDs: a42f0000
+    m_LastClickedID: 12196
     m_ExpandedIDs: 000000009e2d0000dc2d0000c42f00000e310000f0310000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -567,7 +567,7 @@ MonoBehaviour:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 1
-    m_ExpandedInstanceIDs: 00000000
+    m_ExpandedInstanceIDs: 00000000fa2f0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -633,7 +633,7 @@ MonoBehaviour:
   m_Position:
     m_Target: {x: -0.3000031, y: 2.795539, z: -0.25079897}
     speed: 2
-    m_Value: {x: -0.32148308, y: 2.8442044, z: -0.23339844}
+    m_Value: {x: -0.3000031, y: 2.795539, z: -0.25079897}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -668,7 +668,7 @@ MonoBehaviour:
   m_Size:
     m_Target: 4.614766
     speed: 2
-    m_Value: 4.832216
+    m_Value: 4.614766
   m_Ortho:
     m_Target: 1
     speed: 2

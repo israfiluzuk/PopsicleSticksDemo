@@ -37,6 +37,15 @@ public class InputController : MonoBehaviour
                             newAngles.z = newAngles.z >180 ? newAngles.z - 180 : newAngles.z;
                             node.sticks[i].transform.localEulerAngles = newAngles;
                             node.sticks[i].degree = Mathf.CeilToInt(newAngles.z);
+                            if (node.sticks[i].degree==1)
+                            {
+                                node.sticks[i].degree = 0;
+                            }
+                            else if (node.sticks[i].degree==180)
+                            {
+                                node.sticks[i].degree = 0;
+                            }
+
                         }
                         
                     }
