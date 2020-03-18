@@ -17,6 +17,7 @@ public class InputController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            DragControl();
             clickTime = Time.time;
             rayhit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, Mathf.Infinity, selectableObjLayerMask);
         }
@@ -35,11 +36,12 @@ public class InputController : MonoBehaviour
                             newAngles.z = newAngles.z < 0 ? newAngles.z + 180 : newAngles.z;
                             newAngles.z = newAngles.z >180 ? newAngles.z - 180 : newAngles.z;
                             node.sticks[i].transform.localEulerAngles = newAngles;
-                            node.sticks[i].degree = (int)newAngles.z;
+                            node.sticks[i].degree = Mathf.CeilToInt(newAngles.z);
                         }
                         
                     }
                 }
+
                 else 
                 {
                     Node currNode = rayhit.transform.GetComponent<Node>();
@@ -49,7 +51,7 @@ public class InputController : MonoBehaviour
                         smallestDistance = 999;
                         for (int i = 0; i < nodes.Length; i++)
                         {
-
+                            
                             float distance = Vector2.Distance(rayhit.transform.position, nodes[i].transform.position);
                             if (smallestDistance > distance)
                             {
@@ -59,44 +61,72 @@ public class InputController : MonoBehaviour
                             }
 
                         }
-                        rayhit.transform.position = nodes[smallestId].transform.position;
-                        if (rayhit.transform.parent != nodes[smallestId].transform)
-                        { 
-                            if (nodes[smallestId].transform.childCount > 0 && nodes[smallestId].transform != rayhit.transform.parent)
+                        bool IsEmpty = true;
+                        if (nodes[smallestId].transform.childCount > 0)
+                        {
+
+                            for (int i = 0; i < nodes[smallestId].transform.GetChild(0).childCount; i++)
                             {
-                                if (currNode != null)
-                                {
-                                    Debug.Log(nodes[smallestId].transform.gameObject.name);
-                                    for (int i = 0; i < currNode.sticks.Count; i++)
+                                for (int j = 0; j < currNode.sticks.Count; j++)
+                                { 
+                                    if (nodes[smallestId].transform.GetChild(0).GetChild(i).GetComponent<Stick>().degree == currNode.sticks[j].degree)
                                     {
-                                        nodes[smallestId].transform.GetChild(0).GetComponent<Node>().sticks.Add(currNode.sticks[i]);
-                                        currNode.sticks[i].transform.SetParent(nodes[smallestId].transform.GetChild(0));
-                                        Debug.Log(currNode.sticks[i].degree);
+                                        IsEmpty = false;
                                     }
-                                    Destroy(rayhit.transform.gameObject);
                                 }
-                            }
-                            else
-                            {
-                                if (currNode != null)
-                                {
-                                    currNode.isMoved = true;
-                                }
-                                rayhit.transform.SetParent(nodes[smallestId].transform);
                             }
                         }
 
+                        if (IsEmpty)
+                        {
+                            rayhit.transform.position = nodes[smallestId].transform.position;
+                            if (rayhit.transform.parent != nodes[smallestId].transform)
+                            {
+                                if (nodes[smallestId].transform.childCount > 0 && nodes[smallestId].transform != rayhit.transform.parent)
+                                {
+                                    if (currNode != null)
+                                    {
+                                        Debug.Log(nodes[smallestId].transform.gameObject.name);
+                                        for (int i = 0; i < currNode.sticks.Count; i++)
+                                        {
+
+                                            nodes[smallestId].transform.GetChild(0).GetComponent<Node>().sticks.Add(currNode.sticks[i]);
+                                            currNode.sticks[i].transform.SetParent(nodes[smallestId].transform.GetChild(0));
+                                            Debug.Log(currNode.sticks[i].degree);
+                                        }
+                                        Destroy(rayhit.transform.gameObject);
+                                    }
+                                }
+                                else
+                                {
+                                    if (currNode != null)
+                                    {
+                                        currNode.isMoved = true;
+                                    }
+                                    rayhit.transform.SetParent(nodes[smallestId].transform);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            rayhit.transform.position = nodes[3].transform.position;
+                        }
+
+
                     }
+                    
 
                 }               
                 
             }
             rayhit = new RaycastHit2D();
             StickControl();
+            DragControl();
         }
         else if (Input.GetMouseButton(0))
         {
-            if(rayhit.transform != null)
+
+            if (rayhit.transform != null)
             {
                 Node currNode = rayhit.transform.GetComponent<Node>();
                 if(currNode != null)
@@ -172,6 +202,67 @@ public class InputController : MonoBehaviour
         }
 
         return areSameSticks;
+    }
+    void DragControl()
+    {
+        Node moveSticks = new Node();
+
+        bool isdraggable = true;
+        int[] directions= new int[4];
+        int selectedStickCount = 0; 
+        for (int i = 0; i < 3; i++)
+        {
+            if(rayhit.transform!=null)
+            {
+                Node currNode = rayhit.transform.GetComponent<Node>();
+                Debug.Log("****"+moveSticks.sticks[i].degree+ "****");
+                if (currNode != null)
+                {
+                    Debug.Log("Current : "+currNode.sticks[i].degree);
+                    for (int j = 0; j < currNode.sticks.Count; j++)
+                    {
+                        directions[i] = currNode.sticks[i].degree;
+                        Debug.Log(directions[i]);
+                    }
+                }
+            } 
+        }
+        /*if(selectedStickCount == 3)
+        {
+            for (int i = 1; i < 3; i++)
+            {
+                if(directions[0] != directions[i])
+                {
+                    isdraggable = false;
+                }
+            }
+        }
+        else
+        {
+            isdraggable = false;
+        }
+
+        if(isdraggable)
+        { 
+            ScoreScript.scoreValue += 10;
+            for (int j =0; j< 3; j++)
+            {
+                Node rStick = nodes[j].GetChild(0).GetComponent<Node>();
+                for (int i = 0; i< rStick.sticks.Count; i++)
+                {
+                    if (rStick.sticks[i].degree == 90)
+                    {
+                        GameObject removedObj = rStick.sticks[i].gameObject;
+                        rStick.sticks.RemoveAt(i);
+                        Destroy(removedObj);
+                    }
+                }
+                
+            }
+
+        }*/
+
+        
     }
 
 }
