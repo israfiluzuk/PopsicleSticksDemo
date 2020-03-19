@@ -754,4 +754,5 @@ ScriptsOnlyBuild:
   platform: 13
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: D:/UNITY WORKS/Work Demos/PopsicleSticksDemo/APK/Popsicle Sticks Demo.apk
+  playerPath: D:/UNITY WORKS/Work Demos/PopsicleSticksDemo/Popsicle Stick Demo/APK/Popsicle
+    Sticks Demo.apk
